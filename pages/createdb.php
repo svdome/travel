@@ -2,6 +2,8 @@
 
 include_once "functions.php";
 
+// Создание таблиц БД и их загрузув
+
 $link = connect();
 
 $ct1 = 'create table countries(id int not null auto_increment primary key, 
