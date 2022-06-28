@@ -48,7 +48,9 @@
         <!--Cities-->
         <?php
         echo '<form action="index.php?page=4" method="post" class="input-group" id="formcity">';
-        $selectCities = 'select cities.id, cities.city, countries.country from countries, cities where cities.countryid = countries.id order by id asc';
+        $selectCities = 'select cities.id, cities.city, countries.country 
+        from countries, cities 
+        where cities.countryid = countries.id order by id asc';
         $res = mysqli_query($link, $selectCities);
         echo '<table class="table table-striped">';
         while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
@@ -108,10 +110,125 @@
 <div class="row">
     <div class="col-sm-6 col-md-6 col-lg-6 left">
         <!--Hotels-->
+        <?php
+        echo '<form action="index.php?page=4" method="post" class="input-group" id="formhotel">';
+        $selectHotels = 'select cities.id, cities.city, hotels.id, hotels.hotel, hotels.cityid, hotels.countryid, hotels.stars, hotels.info, countries.id, countries.country
+        from cities, hotels, countries
+        where hotels.cityid=cities.id and hotels.countryid=counries.id';
+        $res = mysqli_query($link, $selectHotels);
+        $error = mysqli_errno($link);
+        //место для вывода ошибки запроса
 
+        echo '<table class ="table" width="100%">';
+        while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+            echo '<tr>';
+            echo '<td>' . $row[2] . '</td>';
+            echo '<td>' . $row[1] . '-' . $row[9] . '</td>';
+            echo '<td>' . $row[3] . '</td>';
+            echo '<td>' . $row[6] . '</td>';
+            echo '<td><input type="checkbox" name="hb' . $row[2] . '"></td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+        mysqli_free_result($res);
+
+
+        $selectCC = 'select cities.id, cities.city, countries.country, countries.id
+        from countries, cities 
+        where cities.countryid=countries.id';
+        $res = mysqli_query($link, $selectCC);
+        $linkCityToCountry = [];
+        echo '<select name="hcity" class=" ">'; //?
+        while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+            echo '<option value="' . $row[0] . '">' . $row[1] . " : " . $row[2] . '</option>';
+            $linkCityToCountry[$row[0]] = $row[3];
+        }
+        echo '</select>';
+
+        echo '<input type="text" name="hotel" placeholder="Hotel">';
+        echo '<input type="text" name="cost" placeholder="Cost">';
+        echo '&nbsp;&nbsp;Stars: <input type="number" name="stars" min="1" max ="5">';
+        echo '<br><textarea name ="info" placeholder="Description"></textarea><br>';
+        echo '<input type="submit" name="addhotel" value="add" class="btn btn-sm btn-info">';
+        echo '<input type="submit" name="delhotel" value="delete" class="btn btn-sm btn-warning">';
+        echo '</form>';
+        mysqli_free_result($res);
+
+        if (isset($_POST['addhotel'])) {
+            $hotel = trim(htmlspecialchars($_POST['hotel']));
+            $cost = trim(htmlspecialchars($_POST['cost']));
+            $stars = intval($_POST['stars']);
+            $info = trim(htmlspecialchars($_POST['info']));
+            if ($hotel == " " || $cost == " " || $stars == " ") exit();
+            $cityid = $_POST['hcity'];
+            $countryid = $linkCityToCountry[$cityid];
+            $insertHotel = 'insert into hotels (hotel, cityid, countryid, stars, cost, info) 
+                            values ("' . $hotel . '",' . $cityid . ',' . $countryid . ',' . $stars . ',' . $cost . ',"' . $info . '")';
+            mysqli_query($link,  $insertHotel);
+            $error = mysqli_errno($link);
+            if ($error) {
+                echo 'Error code: ' . $error . '<br>';
+                exit();
+            }
+            echo "<script>";
+            echo "window.location=document.URL;";
+            echo "</script>";
+        }
+
+        if (isset($_POST['delhotel'])) {
+            foreach ($_POST as $key => $value) {
+                if (substr($key, 0, 2) == 'hb') {
+                    $idc = substr($key, 2);
+                    $del = 'delete from hotel where id =' . $idc;
+                    mysqli_query($link, $del);
+                    $error = mysqli_errno($link);
+                    if ($error) {
+                        echo 'Error code: ' . $error . '<br>';
+                        exit();
+                    }
+                }
+            }
+            echo "<script>";
+            echo "window.location=document.URL;";
+            echo "</script>";
+        }
+
+        ?>
     </div>
     <div class="col-sm-6 col-md-6 col-lg-6 right">
         <!--Images-->
+        <?php
 
+        echo '<form action="index.php?page=4" method="post" enctype ="multipart/form-data" class="input-group">';
+        echo '<select name="hotelid">';
+        $select = 'select hotels.id, countries.country, cities.city, hotels.hotel
+                    from countries, cities, hotels 
+                    where countries.id= hotels.countryid and cities.id=hotels.cityid 
+                    order by countries.country';
+        $res = mysqli_query($link, $select);
+        while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+            echo '<option value="' . $row[0] . '">';
+            echo $row[1] . '/' . $row[2] . '/' . $row[3];
+            echo '</option>';
+        }
+        mysqli_free_result($res);
+        echo '<input type="file" name="file[]" multiple accept="image/*">';
+        echo '<input type="submit" name="addimage" value="Add" class = "btn btn-sm btn-info">';
+        echo '</select>';
+        echo '</form>';
+        if (isset($_REQUEST['addimage'])) {
+            foreach ($_FILES['file']['name'] as $key => $value) {
+                if ($_FILES['file']['error'][$key] != 0) {
+                    echo '<script>alert("Upload file error:' . $value . '")</script>';
+                    continue;
+                }
+                if (move_uploaded_file($_FILES['file']['tmp_name'][$key], 'images/' . $value)) {
+                    $ins = 'insert into images(hotelid, imagepath) 
+                            values (' . $_REQUEST['hotelid'] . ', "images/' . $value . '")';
+                    mysqli_query($link, $ins);
+                }
+            }
+        }
+        ?>
     </div>
 </div>
