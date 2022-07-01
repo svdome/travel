@@ -112,12 +112,13 @@
         <!--Hotels-->
         <?php
         echo '<form action="index.php?page=4" method="post" class="input-group" id="formhotel">';
-        $selectHotels = 'select cities.id, cities.city, hotels.id, hotels.hotel, 
-        hotels.cityid, hotels.countryid, hotels.stars, hotels.info, countries.id, countries.country, imagespath
+        $selectHotels = 'SELECT cities.id, cities.city, hotels.id, hotels.hotel, 
+        hotels.cityid, hotels.countryid, hotels.stars, hotels.info, countries.id, countries.country, images.imagepath
         from cities, hotels, countries, images 
         where hotels.cityid=cities.id and hotels.countryid=counries.id and hotel.id= images.hotelid';
         $res = mysqli_query($link, $selectHotels);
         $error = mysqli_errno($link);
+        echo $error;
         //место для вывода ошибки запроса
 
         echo '<table class ="table" width="100%">';
@@ -127,7 +128,7 @@
             echo '<td>' . $row[1] . '-' . $row[9] . '</td>';
             echo '<td>' . $row[3] . '</td>';
             echo '<td>' . $row[6] . '</td>';
-            echo '<td>' . $row[10] . '</td>'; // Добавление фото отеля
+            echo '<td><img src = ' . $row[10] . ' alt="a foto" width="100px" height="100px"></td>'; // Добавление фото отеля
             echo '<td><input type="checkbox" name="hb' . $row[2] . '"></td>';
             echo '</tr>';
         }
