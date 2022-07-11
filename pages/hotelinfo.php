@@ -25,10 +25,10 @@
         $hinfo = $row['info'];
         mysqli_free_result($res);
         echo '<h2 class="text-uppercase text-center">' . $hname . '</h2>';
-        echo '<div class="row"><div class="col-md-6 text-centr">';
+        echo '<div class="row"><div class="col-md-6 text-center">';
         $select = 'SELECT imagepath from images where hotelid=' . $hotel;
         $res = mysqli_query($link, $select);
-        echo '<span class="label-info"> Watch your </span>';
+        echo '<span class="label label-info">Watch your pictures</span>';
         echo '<ul id="gallery">';
         $i = 0;
         while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
@@ -38,9 +38,9 @@
             echo '<li>' . $row['cost'] . '</li>';
             echo '<li>' . $row['info'] . '</li>';
         }
+        mysqli_fetch_array($res);
+        echo '</ul>';
     }
-    mysqli_fetch_array($res);
-    echo '</ul>';
     ?>
 
 </body>

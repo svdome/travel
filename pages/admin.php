@@ -1,9 +1,16 @@
+<?php
+    if(!isset($_SESSION['radmin'])) {
+        echo "<h3><span style='color: red;'>Only for Admins!</span></h3>";
+        exit();
+    }
+?>
+
 <div class="row">
     <div class="col-sm-6 col-md-6 col-lg-6 left">
         <!--Countries-->
         <?php
         $link = connect();
-        $selectCountries = 'select * from countries order by id asc';
+        $selectCountries = 'SELECT * from countries order by id asc';
         $res = mysqli_query($link, $selectCountries);
         echo '<form action="index.php?page=4" method="post" class="input-group" id="formcountry">';
         echo '<table class="table table-striped">';
@@ -48,7 +55,7 @@
         <!--Cities-->
         <?php
         echo '<form action="index.php?page=4" method="post" class="input-group" id="formcity">';
-        $selectCities = 'select cities.id, cities.city, countries.country 
+        $selectCities = 'SELECT cities.id, cities.city, countries.country 
         from countries, cities 
         where cities.countryid = countries.id order by id asc';
         $res = mysqli_query($link, $selectCities);
@@ -68,8 +75,7 @@
         while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
             echo '<option value="' . $row[0] . '">' . $row[1] . '</option>';
         }
-        echo '</select>';
-
+        echo '</select>'; 
         echo '<input type="text" name="city" placeholder="City">';
         echo '<input type="submit" name="addcity" value="Add" class="btn btn-sm btn-info">';
         echo '<input type="submit" name="delcity" value="Delete" class="btn btn-sm btn-warning">';
@@ -115,11 +121,11 @@
         $selectHotels = 'SELECT cities.id, cities.city, hotels.id, hotels.hotel, 
         hotels.cityid, hotels.countryid, hotels.stars, hotels.info, countries.id, countries.country, images.imagepath
         from cities, hotels, countries, images 
-        where hotels.cityid=cities.id and hotels.countryid=counries.id and hotel.id= images.hotelid';
+        where hotels.cityid=cities.id and hotels.countryid=counries.id and hotel.id=images.hotelid';
         $res = mysqli_query($link, $selectHotels);
-        $error = mysqli_errno($link);
-        echo $error;
-        //место для вывода ошибки запроса
+            $error = mysqli_errno($link);
+            echo $error; //1054
+            //место для вывода ошибки запроса
 
         echo '<table class ="table" width="100%">';
         while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
@@ -136,7 +142,7 @@
         mysqli_free_result($res);
 
 
-        $selectCC = 'select cities.id, cities.city, countries.country, countries.id
+        $selectCC = 'SELECT cities.id, cities.city, countries.country, countries.id
         from countries, cities 
         where cities.countryid=countries.id';
         $res = mysqli_query($link, $selectCC);
@@ -204,7 +210,7 @@
 
         echo '<form action="index.php?page=4" method="post" enctype ="multipart/form-data" class="input-group">';
         echo '<select name="hotelid">';
-        $select = 'select hotels.id, countries.country, cities.city, hotels.hotel
+        $select = 'SELECT hotels.id, countries.country, cities.city, hotels.hotel
                     from countries, cities, hotels 
                     where countries.id= hotels.countryid and cities.id=hotels.cityid 
                     order by countries.country';
@@ -226,10 +232,11 @@
                     continue;
                 }
                 if (move_uploaded_file($_FILES['file']['tmp_name'][$key], 'images/' . $value)) {
-                    $ins = 'insert into images(hotelid, imagepath) 
-                            values (' . $_REQUEST['hotelid'] . ', "images/' . $value . '")';
+                    $ins = 'insert into images(hotelid, imagepath) values (' . $_REQUEST['hotelid'] . ', "images/' . $value . '")';
                     mysqli_query($link, $ins);
+                    
                 }
+                
             }
         }
         ?>

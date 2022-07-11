@@ -11,4 +11,7 @@
     <li <?php echo ($page == 4) ? "class= 'active'"  : " " ?>>
         <a href= "index.php?page=4">Admin Forms</a>
     </li>
+    <li <?php echo ($page == 5 && isset($_SESSION['radmin'])) ? "class= 'active'"  : " " ?>>
+        <a href= "index.php?page=5">ghdfgc</a>
+    </li>
 </ul>
