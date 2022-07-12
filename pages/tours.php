@@ -19,7 +19,7 @@ if (isset($_POST['selcountry'])) {
     if ($countryid == 0) {
         exit();
     }
-    $res = mysqli_query($link, 'SELECT * from cities where countryid='. $countryid .' order by city');
+    $res = mysqli_query($link, 'SELECT * from cities where countryid=' . $countryid . ' order by city');
     echo '<select name="cityid" class="col-sm-3 col-md-3 col-lg-3">';
     echo '<option value="0">Select city...</option>';
     while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
@@ -37,18 +37,18 @@ if (isset($_POST['selcity'])) {
     from hotels h, cities ct, countries cnt
     where h.cityid=ct.id and h.countryid=cnt.id and h.cityid=$cityid';
     $res = mysqli_query($link, $select);
-        $error = mysqli_errno($link);
-        echo $error; // 1054
-        //место для вывода ошибки запроса
+    $error = mysqli_errno($link);
+    echo $error; // 1054
+    //место для вывода ошибки запроса
     echo '<table width="100%" class="table table-striped tbtours text-center">';
     echo '<thead style="font-weight: bold;"><td>Hotel</td><td>Country</td><td>City</td><td>Price</td><td>Stars</td><td>Link</td></thead>';
     while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
-        echo '<tr id="'.$row['city'].'">';
-        echo '<td>'.$row['hotel'].'</td><td>'.$row['country'].'</td><td>'.$row['city'].'</td><td>'.$row['price'].'</td><td>'.$row['stars'].'</td><td><a href="pages/hotelinfo.php?hotel='.$row['hotelid'].'" target="_blank">More info</a></td>';
+        echo '<tr id="' . $row['city'] . '">';
+        echo '<td>' . $row['hotel'] . '</td><td>' . $row['country'] . '</td><td>' . $row['city'] . '</td><td>' . $row['price'] . '</td><td>' . $row['stars'] . '</td><td><a href="pages/hotelinfo.php?hotel=' . $row['hotelid'] . '" target="_blank">More info</a></td>';
         echo '</tr>';
     }
+    //mysqli_free_result($res);
     echo '</table><br>';
 }
 //---------------------------------------------------------------------------------------------------------------
-
-
+?>

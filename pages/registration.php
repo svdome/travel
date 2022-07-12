@@ -20,7 +20,8 @@ if (!isset($_POST['regbtn'])) { ?>
         </div>
         <button type="submit" class="btn btn-primary" name="regbtn">Register</button>
     </form>
-<? } else {
+<?php
+} else {
     if (register($_POST['login'], $_POST['pass1'], $_POST['email'])) {
         echo "<h3><span style='color: green;'>New user was successfully added!</span></h3>";
     }

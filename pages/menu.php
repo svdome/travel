@@ -1,17 +1,19 @@
 <ul class="nav nav-tabs nav-justified">
     <li <?php echo ($page == 1) ? "class= 'active'"  : " " ?>>
-        <a href= "index.php?page=1">Tours</a>
+        <a href="index.php?page=1">Tours</a>
     </li>
     <li <?php echo ($page == 2) ? "class= 'active'"  : " " ?>>
-        <a href= "index.php?page=2">Comments</a>
+        <a href="index.php?page=2">Comments</a>
     </li>
     <li <?php echo ($page == 3) ? "class= 'active'"  : " " ?>>
-        <a href= "index.php?page=3">Registration</a>
+        <a href="index.php?page=3">Registration</a>
     </li>
     <li <?php echo ($page == 4) ? "class= 'active'"  : " " ?>>
-        <a href= "index.php?page=4">Admin Forms</a>
+        <a href="index.php?page=4">Admin Forms</a>
     </li>
-    <li <?php echo ($page == 5 && isset($_SESSION['radmin'])) ? "class= 'active'"  : " " ?>>
-        <a href= "index.php?page=5">ghdfgc</a>
-    </li>
+    <? if (isset($_SESSION['radmin'])) { ?>
+        <li <?php echo ($page == 5) ? "class= 'active'"  : " " ?>>
+            <a href="index.php?page=5">Private</a>
+        </li>
+    <? } ?>
 </ul>

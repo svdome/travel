@@ -38,7 +38,7 @@
             echo '<li>' . $row['cost'] . '</li>';
             echo '<li>' . $row['info'] . '</li>';
         }
-        mysqli_fetch_array($res);
+        mysqli_free_result($res);
         echo '</ul>';
     }
     ?>

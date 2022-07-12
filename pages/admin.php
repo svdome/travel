@@ -1,8 +1,9 @@
 <?php
-    if(!isset($_SESSION['radmin'])) {
-        echo "<h3><span style='color: red;'>Only for Admins!</span></h3>";
-        exit();
-    }
+// проверка ключа администратора
+if (!isset($_SESSION['radmin'])) {
+    echo "<h3><span style='color: red;'>Only for Admins!</span></h3>";
+    exit();
+}
 ?>
 
 <div class="row">
@@ -75,7 +76,7 @@
         while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
             echo '<option value="' . $row[0] . '">' . $row[1] . '</option>';
         }
-        echo '</select>'; 
+        echo '</select>';
         echo '<input type="text" name="city" placeholder="City">';
         echo '<input type="submit" name="addcity" value="Add" class="btn btn-sm btn-info">';
         echo '<input type="submit" name="delcity" value="Delete" class="btn btn-sm btn-warning">';
@@ -123,9 +124,9 @@
         from cities, hotels, countries, images 
         where hotels.cityid=cities.id and hotels.countryid=counries.id and hotel.id=images.hotelid';
         $res = mysqli_query($link, $selectHotels);
-            $error = mysqli_errno($link);
-            echo $error; //1054
-            //место для вывода ошибки запроса
+        $error = mysqli_errno($link);
+        echo $error; //1054
+        //место для вывода ошибки запроса
 
         echo '<table class ="table" width="100%">';
         while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
@@ -234,9 +235,7 @@
                 if (move_uploaded_file($_FILES['file']['tmp_name'][$key], 'images/' . $value)) {
                     $ins = 'insert into images(hotelid, imagepath) values (' . $_REQUEST['hotelid'] . ', "images/' . $value . '")';
                     mysqli_query($link, $ins);
-                    
                 }
-                
             }
         }
         ?>

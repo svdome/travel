@@ -19,7 +19,9 @@ include_once "pages/functions.php";
     <div class="container">
         <div class="row">
             <header class="col-sm-12 col-md-12 col-lg-12">
-
+                <?php
+                include_once "pages/login.php";
+                ?>
             </header>
         </div>
         <div class="row">
@@ -40,6 +42,7 @@ include_once "pages/functions.php";
                     if ($page == 2) include_once "pages/comments.php";
                     if ($page == 3) include_once "pages/registration.php";
                     if ($page == 4) include_once "pages/admin.php";
+                    if ($page == 5 && isset($_SESSION['radmin'])) include_once "pages/privat.php";
                 }
                 ?>
             </section>
