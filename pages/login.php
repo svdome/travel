@@ -7,7 +7,7 @@ if (isset($_SESSION['ruser'])) {
         $page = '?page=' . $_GET['page'];
     }
     echo '<form action="index.php' . $page . '" class="form-inline pull-right" method="post">';
-    echo '<h4>Hello, <span>' . $_SESSION['ruser'] . '</span>&nbsp;<input="submit" value="Logout" id="ex" name="ex" class="btn btn-default btn-sm"></h4>';
+    echo '<h4>Hello, <span>' . $_SESSION['ruser'] . '</span>&nbsp; <input type="submit" value="Logout" id="ex" name="ex" class="btn btn-default btn-xs"></h4>';
     echo '</form>';
 
     if (isset($_POST['ex'])) {

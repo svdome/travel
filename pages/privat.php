@@ -26,6 +26,7 @@ if(isset($_POST['addadmin'])) {
     mysqli_query($link, $insert);
 }
 
+
 $select='SELECT * from users where roleid=1 order by login';
 $res=mysqli_query($link, $select);
 echo '<table class="table table-striped">';
@@ -42,6 +43,7 @@ mysqli_free_result($res);
 echo '</table>';
 
 //-------------------------------------------------------------------------
+// понижение статуса админа
 /**
 echo '<form action="index.php?page=5" method="post" class="input-group">';
 echo '<select name="deletuserid">';

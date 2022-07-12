@@ -135,7 +135,7 @@ if (!isset($_SESSION['radmin'])) {
             echo '<td>' . $row[1] . '-' . $row[9] . '</td>';
             echo '<td>' . $row[3] . '</td>';
             echo '<td>' . $row[6] . '</td>';
-            echo '<td><img src = ' . $row[10] . ' alt="a foto" width="100px" height="100px"></td>'; // Добавление фото отеля
+            echo '<td><img src = "../' . $row[10] . '" alt="foto hotel" width="100px" height="100px"></td>'; // Добавление фото отеля
             echo '<td><input type="checkbox" name="hb' . $row[2] . '"></td>';
             echo '</tr>';
         }
