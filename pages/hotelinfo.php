@@ -12,7 +12,7 @@
 
 <body>
     <?
-    include_once "function.php";
+    include_once "functions.php";
     if (isset($_GET['hotel'])) {
         $hotel = $_GET['hotel'];
         $link = connect();
@@ -32,11 +32,11 @@
         echo '<ul id="gallery">';
         $i = 0;
         while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
-            echo '<li><img src="../' . $row['imagepath'] . '" alt="image hotel"></li>';
-            echo '<li>' . $row['hotel'] . '</li>';
-            echo '<li>' . $row['stars'] . '</li>';
-            echo '<li>' . $row['cost'] . '</li>';
-            echo '<li>' . $row['info'] . '</li>';
+            echo '<li><img src="../'. $row['imagepath'] . '" alt="image hotel"></li>';
+            echo '<li>Hotel:' . $hname . '</li>';
+            echo '<li>Stars:' . $hstars . '</li>';
+            echo '<li>Price:' . $hcost  . '</li>';
+            echo '<li>Info:' . $hinfo . '</li>';
         }
         mysqli_free_result($res);
         echo '</ul>';

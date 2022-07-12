@@ -120,12 +120,12 @@ if (!isset($_SESSION['radmin'])) {
         <?php
         echo '<form action="index.php?page=4" method="post" class="input-group" id="formhotel">';
         $selectHotels = 'SELECT cities.id, cities.city, hotels.id, hotels.hotel, 
-        hotels.cityid, hotels.countryid, hotels.stars, hotels.info, countries.id, countries.country, images.imagepath
+        hotels.cityid, hotels.countryid, hotels.stars, hotels.cost, hotels.info, countries.id, countries.country, images.imagepath
         from cities, hotels, countries, images 
-        where hotels.cityid=cities.id and hotels.countryid=counries.id and hotel.id=images.hotelid';
+        where hotels.cityid=cities.id and hotels.countryid=countries.id and hotels.id=images.hotelid';
         $res = mysqli_query($link, $selectHotels);
         $error = mysqli_errno($link);
-        echo $error; //1054
+        //echo $error; //1054
         //место для вывода ошибки запроса
 
         echo '<table class ="table" width="100%">';
@@ -141,7 +141,6 @@ if (!isset($_SESSION['radmin'])) {
         }
         echo '</table>';
         mysqli_free_result($res);
-
 
         $selectCC = 'SELECT cities.id, cities.city, countries.country, countries.id
         from countries, cities 
@@ -159,41 +158,43 @@ if (!isset($_SESSION['radmin'])) {
         echo '<input type="text" name="cost" placeholder="Cost">';
         echo '&nbsp;&nbsp;Stars: <input type="number" name="stars" min="1" max ="5">';
         echo '<br><textarea name ="info" placeholder="Description"></textarea><br>';
-        echo '<input type="submit" name="addhotel" value="add" class="btn btn-sm btn-info">';
-        echo '<input type="submit" name="delhotel" value="delete" class="btn btn-sm btn-warning">';
+        echo '<input type="submit" name="addhotel" value="Add" class="btn btn-sm btn-info">';
+        echo '<input type="submit" name="delhotel" value="Delete" class="btn btn-sm btn-warning">';
         echo '</form>';
         mysqli_free_result($res);
-
+        // обработчик добавления отелей
         if (isset($_POST['addhotel'])) {
             $hotel = trim(htmlspecialchars($_POST['hotel']));
             $cost = trim(htmlspecialchars($_POST['cost']));
             $stars = intval($_POST['stars']);
             $info = trim(htmlspecialchars($_POST['info']));
-            if ($hotel == " " || $cost == " " || $stars == " ") exit();
+            if ($hotel == " " || $cost == " " || $stars == " ") {
+                exit();
+            }
             $cityid = $_POST['hcity'];
             $countryid = $linkCityToCountry[$cityid];
-            $insertHotel = 'insert into hotels (hotel, cityid, countryid, stars, cost, info) 
+            $insertHotel = 'INSERT into hotels (hotel, cityid, countryid, stars, cost, info) 
                             values ("' . $hotel . '",' . $cityid . ',' . $countryid . ',' . $stars . ',' . $cost . ',"' . $info . '")';
             mysqli_query($link,  $insertHotel);
             $error = mysqli_errno($link);
             if ($error) {
-                echo 'Error code: ' . $error . '<br>';
+                echo 'Error code add: ' . $error . '<br>';
                 exit();
             }
             echo "<script>";
             echo "window.location=document.URL;";
             echo "</script>";
         }
-
+        // обработчик удаления отелей
         if (isset($_POST['delhotel'])) {
             foreach ($_POST as $key => $value) {
                 if (substr($key, 0, 2) == 'hb') {
                     $idc = substr($key, 2);
-                    $del = 'delete from hotel where id =' . $idc;
+                    $del = 'DELETE from hotels where id =' . $idc;
                     mysqli_query($link, $del);
                     $error = mysqli_errno($link);
                     if ($error) {
-                        echo 'Error code: ' . $error . '<br>';
+                        echo 'Error code delete: ' . $error . '<br>';
                         exit();
                     }
                 }
@@ -233,9 +234,10 @@ if (!isset($_SESSION['radmin'])) {
                     continue;
                 }
                 if (move_uploaded_file($_FILES['file']['tmp_name'][$key], 'images/' . $value)) {
-                    $ins = 'insert into images(hotelid, imagepath) values (' . $_REQUEST['hotelid'] . ', "images/' . $value . '")';
+                    $ins = 'INSERT into images(hotelid, imagepath) values (' . $_REQUEST['hotelid'] . ', "images/' . $value . '")';
                     mysqli_query($link, $ins);
                 }
+                //mysqli_free_result($ins); 
             }
         }
         ?>
