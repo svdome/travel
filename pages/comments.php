@@ -74,21 +74,12 @@ if (isset($_POST['selhotel'])) {
     $error = mysqli_errno($link);
     //echo $error;
     //место для вывода ошибки запроса
-    echo '<table width="100%" class="table table-striped tbtours text-center">';
-    echo '<thead style="font-weight: bold;"><td>Hotel</td><td>Country</td><td>City</td></thead>';
 
     if ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
-        echo '<tr id="' . $row['hotel'] . '">';
-        echo '<td>' . $row['hotel'] . '</td><td>' . $row['country'] . '</td><td>' . $row['city'] . '</td>';
-        echo '</tr>';
         $arruser = [];
         $arruser['user'] = $_SESSION['ruser'];
-        $arruser['hotel'] = $row['hotel'];
-        $arruser['city'] = $row['city'];
-        $arruser['country'] = $row['country'];
-        //var_dump($arruser);
         $text = file_get_contents('pages/text_comments.txt'); //читаем текстовый файл
-        file_put_contents('pages/text_comments.txt', $text . ' User: '. $arruser['user'] .', Hotel: '. $row['hotel'] .', Country: '. $row['country'] .', City: '. $row['city'].', ');
+        file_put_contents('pages/text_comments.txt', $text . date('d-m-Y') . ', User: '. $arruser['user'] .', Hotel: '. $row['hotel'] .', Country: '. $row['country'] .', City: '. $row['city'].', ');
     }
     mysqli_free_result($res);
     echo '</table><br>';
