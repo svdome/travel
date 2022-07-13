@@ -82,12 +82,13 @@ if (isset($_POST['selhotel'])) {
         echo '<td>' . $row['hotel'] . '</td><td>' . $row['country'] . '</td><td>' . $row['city'] . '</td>';
         echo '</tr>';
         $arruser = [];
+        $arruser['user'] = $_SESSION['ruser'];
         $arruser['hotel'] = $row['hotel'];
         $arruser['city'] = $row['city'];
         $arruser['country'] = $row['country'];
         //var_dump($arruser);
         $text = file_get_contents('pages/text_comments.txt'); //читаем текстовый файл
-        file_put_contents('pages/text_comments.txt', $text . $row['hotel'] . $row['country'] . $row['city']);
+        file_put_contents('pages/text_comments.txt', $text . ' User: '. $arruser['user'] .', Hotel: '. $row['hotel'] .', Country: '. $row['country'] .', City: '. $row['city'].', ');
     }
     mysqli_free_result($res);
     echo '</table><br>';
@@ -107,7 +108,7 @@ if (isset($_POST['addcomment'])) {
         exit();
     }
     $text = file_get_contents('pages/text_comments.txt'); //читаем текстовый файл
-    file_put_contents('pages/text_comments.txt', $text . $comment); // добавляем коментарий
+    file_put_contents('pages/text_comments.txt', $text . $comment. '<br>'); // добавляем коментарий
 
 
     echo "<script>";
