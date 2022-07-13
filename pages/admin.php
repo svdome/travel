@@ -32,7 +32,7 @@ if (!isset($_SESSION['radmin'])) {
         if (isset($_POST['addcountry'])) {
             $country = trim(htmlspecialchars($_POST['country']));
             if ($country == "") exit();
-            $insertCountry = 'insert into countries (country) values ("' . $country . '")';
+            $insertCountry = 'INSERT into countries (country) values ("' . $country . '")';
             mysqli_query($link,  $insertCountry);
             echo "<script>";
             echo "window.location=document.URL;";
@@ -42,7 +42,7 @@ if (!isset($_SESSION['radmin'])) {
             foreach ($_POST as $key => $value) {
                 if (substr($key, 0, 2) == 'cb') {
                     $id = substr($key, 2);
-                    $delete = 'delete from countries where id =' . $id;
+                    $delete = 'DELETE from countries where id =' . $id;
                     mysqli_query($link, $delete);
                 }
             }
@@ -71,7 +71,7 @@ if (!isset($_SESSION['radmin'])) {
         }
         echo '</table>';
         mysqli_free_result($res);
-        $res = mysqli_query($link, 'select * from countries');
+        $res = mysqli_query($link, 'SELECT * from countries');
         echo '<select name="countryname" class="form-control">';
         while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
             echo '<option value="' . $row[0] . '">' . $row[1] . '</option>';
@@ -86,7 +86,7 @@ if (!isset($_SESSION['radmin'])) {
             $city = trim(htmlspecialchars($_POST['city']));
             if ($city == "") exit();
             $countryid = $_POST['countryname'];
-            $insertCity = 'insert into cities (city, countryid) values ("' . $city . '", ' . $countryid . ')';
+            $insertCity = 'INSERT into cities (city, countryid) values ("' . $city . '", ' . $countryid . ')';
             mysqli_query($link,  $insertCity);
             $error = mysqli_errno($link);
             if ($error) {
@@ -102,7 +102,7 @@ if (!isset($_SESSION['radmin'])) {
             foreach ($_POST as $key => $value) {
                 if (substr($key, 0, 2) == 'ci') {
                     $id = substr($key, 2);
-                    $del = 'delete from cities where id =' . $id;
+                    $del = 'DELETE from cities where id =' . $id;
                     mysqli_query($link, $del);
                 }
             }

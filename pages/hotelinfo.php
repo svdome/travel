@@ -37,6 +37,7 @@
             echo '<li>Stars:' . $hstars . '</li>';
             echo '<li>Price:' . $hcost  . '</li>';
             echo '<li>Info:' . $hinfo . '</li>';
+            
         }
         mysqli_free_result($res);
         echo '</ul>';
