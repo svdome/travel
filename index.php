@@ -13,6 +13,7 @@ include_once "pages/functions.php";
     <title>Travel Agency</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/myScript.js"></script>
 </head>
 
 <body>

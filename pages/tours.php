@@ -2,6 +2,8 @@
 <hr>
 <?php
 $link = connect();
+
+/**
 echo '<form action="index.php?page=1" method="post">';
 echo '<select name="countryid" class="col-sm-3 col-md-3 col-lg-3">';
 $res = mysqli_query($link, 'SELECT * from countries order by country');
@@ -53,3 +55,21 @@ if (isset($_POST['selcity'])) {
 
 echo $_POST['comment'];
 ?>
+ */
+echo '<div class="form-inline">';
+echo '<select name="countryid" id="countryid" onchange="showCities(this.value)">';
+echo '<option value="0">select country</option>';
+$res = mysqli_query($link, 'SELECT * from countries');
+while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+    echo '<option value="' . $row['id'] . '">' . $row['country'] . '</option>';
+}
+echo '</select>';
+
+//список городов
+echo '<select name="cityid" id="citylist" onchange="showHotels(this.value)">';
+
+
+echo '</select>';
+echo '</div>';
+//список отелей
+echo '<div id="h"></div>';
