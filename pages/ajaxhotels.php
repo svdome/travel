@@ -7,8 +7,6 @@ $select = 'SELECT cnt.country as "country", ct.city as "city", h.hotel as "hotel
 from hotels h, cities ct, countries cnt
 where h.cityid=ct.id and h.countryid=cnt.id and h.cityid=' . $hid;
 $res = mysqli_query($link, $select);
-
-
 echo '<table width="100%" class="table table-striped tbtours text-center">';
 echo '<thead style="font-weight: bold;"><td>Hotel</td><td>Country</td><td>City</td><td>Price</td><td>Stars</td><td>Link</td></thead>';
 while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
