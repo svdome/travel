@@ -1,10 +1,11 @@
-<?
-include_once "function.php";
-$link =connect();
+<?php
+include_once "functions.php";
+
+$link = connect();
 $hid = $_GET['hid'];
 $select = 'SELECT cnt.country as "country", ct.city as "city", h.hotel as "hotel", h.cost as "price", h.stars as "stars", h.id as "hotelid"
 from hotels h, cities ct, countries cnt
-where h.cityid=ct.id and h.countryid=cnt.id and h.cityid='.$hid;
+where h.cityid=ct.id and h.countryid=cnt.id and h.cityid=' . $hid;
 $res = mysqli_query($link, $select);
 
 

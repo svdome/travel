@@ -54,15 +54,19 @@ if (isset($_POST['selcity'])) {
 //---------------------------------------------------------------------------------------------------------------
 
 echo $_POST['comment'];
-?>
- */
+?> */
+ 
+
 echo '<div class="form-inline">';
-echo '<select name="countryid" id="countryid" onchange="showCities(this.value)">';
+echo '<select name="countryid" id="countryid" onchange="showCities(this.value);">';
 echo '<option value="0">select country</option>';
 $res = mysqli_query($link, 'SELECT * from countries');
+$error = mysqli_errno($link);
+echo $error;
 while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
     echo '<option value="' . $row['id'] . '">' . $row['country'] . '</option>';
 }
+mysqli_free_result($res);
 echo '</select>';
 
 //список городов
