@@ -12,7 +12,7 @@ function showCities(countryid) {
         }
     }
     //создается и отправляется AJAX запрос
-    ao.open('GET', "../pages/ajaxcities.php?cid=" + countryid, true);
+    ao.open('GET', "./pages/ajaxcities.php?cid=" + countryid, true);
     ao.send(null);
 }
 
@@ -30,6 +30,6 @@ function showHotels(cityid) {
             document.getElementById('h').innerHTML = ao.responseText;
         }
     }
-    ao.open('GET', "../pages/ajaxhotels.php?hid=" + cityid, true);
+    ao.open('GET', "./pages/ajaxhotels.php?hid=" + cityid, true);
     ao.send(null);
 }
