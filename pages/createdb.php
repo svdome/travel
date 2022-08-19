@@ -2,9 +2,9 @@
 
 include_once "functions.php";
 
-// Создание таблиц БД и их загрузув
+// Создание таблиц БД и их загрузка
 
-$link = connect();
+$link = $db(); //connect();
 
 $ct1 = 'create table countries(id int not null auto_increment primary key, 
                             country varchar(64) unique) default charset="utf8"';

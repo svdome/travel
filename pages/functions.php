@@ -1,6 +1,7 @@
 <?php
 
 // Реализация функции подключения к БД
+
 function connect(
     $host = 'localhost',
     $user = 'root',
@@ -12,6 +13,9 @@ function connect(
     mysqli_query($link, "set names 'utf8'");
     return $link;
 }
+
+
+//$db = new PDO('mysql:host=localhost; dbname=travels', 'root', 'root');
 
 // Реализация функции регистрации.
 function register($login, $pass, $email)
@@ -60,6 +64,7 @@ function login($log, $pass)
         echo "<h3><span style='color: red;'>Values length must be between 3 and 30</span></h3>";
         return false;
     }
+
     $link = connect();
     $sel = 'SELECT * from users where login="' . $log . '" and pass="' . md5($pass) . '" ';
     $res = mysqli_query($link, $sel);

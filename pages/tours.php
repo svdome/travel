@@ -1,7 +1,9 @@
 <h2>Select Tours</h2>
 <hr>
 <?php
-$link = connect();
+
+
+
 
 /**
 echo '<form action="index.php?page=1" method="post">';
@@ -55,16 +57,21 @@ if (isset($_POST['selcity'])) {
 
 echo $_POST['comment'];
 ?> */
- 
+
 
 echo '<div class="form-inline">';
 echo '<select name="countryid" id="countryid" onchange="showCities(this.value);">';
 echo '<option value="0">select country</option>';
-$res = mysqli_query($link, 'SELECT * from countries');
-while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+
+//$link = connect();
+//$res = mysqli_query($link, 'SELECT * from countries');
+$db = new PDO('mysql: host=localhost; dbname=travels', 'root', 'root');
+$res=$db->query('select * from countries');
+//while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
     echo '<option value="' . $row['id'] . '">' . $row['country'] . '</option>';
 }
-mysqli_free_result($res);
+//mysqli_free_result($res);
 echo '</select>';
 
 //список городов
