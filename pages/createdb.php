@@ -4,7 +4,9 @@ include_once "functions.php";
 
 // Создание таблиц БД и их загрузка
 
-$link = $db(); //connect();
+//$link = connect();
+$db = new PDO('mysql: host=localhost; dbname=travels', 'root', 'root');
+
 
 $ct1 = 'create table countries(id int not null auto_increment primary key, 
                             country varchar(64) unique) default charset="utf8"';
@@ -38,7 +40,7 @@ $ct6 =  'create table users(id int not null auto_increment primary key,
                             roleid int, foreign key(roleid) references roles(id) on delete cascade,
                             avatar mediumblob) default charset = "utf8"';
 
-
+/**
 mysqli_query($link, $ct1);
 $err = mysqli_errno($link);
 if ($err) {
@@ -75,3 +77,4 @@ if ($err) {
     echo 'Error code users: ' . $err . '<br>';
     exit();
 }
+*/

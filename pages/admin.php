@@ -10,12 +10,18 @@ if (!isset($_SESSION['radmin'])) {
     <div class="col-sm-6 col-md-6 col-lg-6 left">
         <!--Countries-->
         <?php
-        $link = connect();
-        $selectCountries = 'SELECT * from countries order by id asc';
-        $res = mysqli_query($link, $selectCountries);
+        //$link = connect();
+        //$selectCountries = 'SELECT * from countries order by id asc';
+        //$res = mysqli_query($link, $selectCountries);
+        $db = new PDO('mysql: host=localhost; dbname=travels', 'root', 'root');
+        $res=$db->query('select * from countries order by id asc');
+
+
         echo '<form action="index.php?page=4" method="post" class="input-group" id="formcountry">';
         echo '<table class="table table-striped">';
-        while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        //while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        while ($row = $res->fetch(PDO::FETCH_NUM)) {
+
             echo '<tr>';
             echo '<td>' . $row[0] . '</td>';
             echo '<td>' . $row[1] . '</td>';
@@ -23,7 +29,7 @@ if (!isset($_SESSION['radmin'])) {
             echo '</tr>';
         }
         echo '</table>';
-        mysqli_free_result($res);
+        //mysqli_free_result($res);
         echo '<input type="text" name="country" placeholder="Country">';
         echo '<input type="submit" name="addcountry" value="Add" class="btn btn-sm btn-info">';
         echo '<input type="submit" name="delcountry" value="Delete" class="btn btn-sm btn-warning">';
@@ -32,8 +38,10 @@ if (!isset($_SESSION['radmin'])) {
         if (isset($_POST['addcountry'])) {
             $country = trim(htmlspecialchars($_POST['country']));
             if ($country == "") exit();
-            $insertCountry = 'INSERT into countries (country) values ("' . $country . '")';
-            mysqli_query($link,  $insertCountry);
+            //$insertCountry = 'INSERT into countries (country) values ("' . $country . '")';
+            //mysqli_query($link,  $insertCountry);
+            $exec=$db->exec('INSERT into countries (country) values ("' . $country . '")');
+
             echo "<script>";
             echo "window.location=document.URL;";
             echo "</script>";
@@ -42,8 +50,9 @@ if (!isset($_SESSION['radmin'])) {
             foreach ($_POST as $key => $value) {
                 if (substr($key, 0, 2) == 'cb') {
                     $id = substr($key, 2);
-                    $delete = 'DELETE from countries where id =' . $id;
-                    mysqli_query($link, $delete);
+                    //$delete = 'DELETE from countries where id =' . $id;
+                    //mysqli_query($link, $delete);
+                    $exec=$db->exec('DELETE from countries where id =' . $id);
                 }
             }
             echo "<script>";
@@ -56,12 +65,18 @@ if (!isset($_SESSION['radmin'])) {
         <!--Cities-->
         <?php
         echo '<form action="index.php?page=4" method="post" class="input-group" id="formcity">';
-        $selectCities = 'SELECT cities.id, cities.city, countries.country 
+        //$selectCities = 'SELECT cities.id, cities.city, countries.country
+        //from countries, cities
+        //where cities.countryid = countries.id order by id asc';
+        //$res = mysqli_query($link, $selectCities);
+        $db = new PDO('mysql: host=localhost; dbname=travels', 'root', 'root');
+        $res=$db->query('SELECT cities.id, cities.city, countries.country 
         from countries, cities 
-        where cities.countryid = countries.id order by id asc';
-        $res = mysqli_query($link, $selectCities);
+        where cities.countryid = countries.id order by id asc');
+
         echo '<table class="table table-striped">';
-        while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        //while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        while ($row = $res->fetch(PDO::FETCH_NUM)) {
             echo '<tr>';
             echo '<td>' . $row[0] . '</td>';
             echo '<td>' . $row[1] . '</td>';
@@ -70,10 +85,12 @@ if (!isset($_SESSION['radmin'])) {
             echo '</tr>';
         }
         echo '</table>';
-        mysqli_free_result($res);
-        $res = mysqli_query($link, 'SELECT * from countries');
+        //mysqli_free_result($res);
+        //$res = mysqli_query($link, 'SELECT * from countries');
+        $res=$db->query('SELECT * from countries');
         echo '<select name="countryname" class="form-control">';
-        while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        //while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        while ($row = $res->fetch(PDO::FETCH_NUM)) {
             echo '<option value="' . $row[0] . '">' . $row[1] . '</option>';
         }
         echo '</select>';
@@ -86,13 +103,15 @@ if (!isset($_SESSION['radmin'])) {
             $city = trim(htmlspecialchars($_POST['city']));
             if ($city == "") exit();
             $countryid = $_POST['countryname'];
-            $insertCity = 'INSERT into cities (city, countryid) values ("' . $city . '", ' . $countryid . ')';
-            mysqli_query($link,  $insertCity);
-            $error = mysqli_errno($link);
+            //$insertCity = 'INSERT into cities (city, countryid) values ("' . $city . '", ' . $countryid . ')';
+            //mysqli_query($link,  $insertCity);
+            $exec=$db->exec('INSERT into cities (city, countryid) values ("' . $city . '", ' . $countryid . ')');
+
+            /**$error = mysqli_errno($link);
             if ($error) {
                 echo 'Error code: ' . $error . '<br>';
                 exit();
-            }
+            }*/
             echo "<script>";
             echo "window.location=document.URL;";
             echo "</script>";
@@ -102,8 +121,9 @@ if (!isset($_SESSION['radmin'])) {
             foreach ($_POST as $key => $value) {
                 if (substr($key, 0, 2) == 'ci') {
                     $id = substr($key, 2);
-                    $del = 'DELETE from cities where id =' . $id;
-                    mysqli_query($link, $del);
+                    //$del = 'DELETE from cities where id =' . $id;
+                    //mysqli_query($link, $del);
+                    $exec=$db->exec('DELETE from cities where id =' . $id);
                 }
             }
             echo "<script>";
@@ -119,17 +139,23 @@ if (!isset($_SESSION['radmin'])) {
         <!--Hotels-->
         <?php
         echo '<form action="index.php?page=4" method="post" class="input-group" id="formhotel">';
-        $selectHotels = 'SELECT cities.id, cities.city, hotels.id, hotels.hotel, 
+        //$selectHotels = 'SELECT cities.id, cities.city, hotels.id, hotels.hotel,
+        //hotels.cityid, hotels.countryid, hotels.stars, hotels.cost, hotels.info, countries.id, countries.country, images.imagepath
+        //from cities, hotels, countries, images
+        //where hotels.cityid=cities.id and hotels.countryid=countries.id and hotels.id=images.hotelid';
+        //$res = mysqli_query($link, $selectHotels);
+        $res=$db->query('SELECT cities.id, cities.city, hotels.id, hotels.hotel, 
         hotels.cityid, hotels.countryid, hotels.stars, hotels.cost, hotels.info, countries.id, countries.country, images.imagepath
         from cities, hotels, countries, images 
-        where hotels.cityid=cities.id and hotels.countryid=countries.id and hotels.id=images.hotelid';
-        $res = mysqli_query($link, $selectHotels);
-        $error = mysqli_errno($link);
+        where hotels.cityid=cities.id and hotels.countryid=countries.id and hotels.id=images.hotelid');
+
+        //$error = mysqli_errno($link);
         //echo $error; //1054
         //место для вывода ошибки запроса
 
         echo '<table class ="table" width="100%">';
-        while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        //while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        while ($row = $res->fetch(PDO::FETCH_NUM)) {
             echo '<tr>';
             echo '<td>' . $row[2] . '</td>';
             echo '<td>' . $row[1] . '-' . $row[9] . '</td>';
@@ -140,15 +166,20 @@ if (!isset($_SESSION['radmin'])) {
             echo '</tr>';
         }
         echo '</table>';
-        mysqli_free_result($res);
+        //mysqli_free_result($res);
 
-        $selectCC = 'SELECT cities.id, cities.city, countries.country, countries.id
+        //$selectCC = 'SELECT cities.id, cities.city, countries.country, countries.id
+        //from countries, cities
+        //where cities.countryid=countries.id';
+        //$res = mysqli_query($link, $selectCC);
+        $res=$db->query('SELECT cities.id, cities.city, countries.country, countries.id
         from countries, cities 
-        where cities.countryid=countries.id';
-        $res = mysqli_query($link, $selectCC);
+        where cities.countryid=countries.id');
+
         $linkCityToCountry = [];
         echo '<select name="hcity" class=" ">'; //?
-        while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        //while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        while ($row = $res->fetch(PDO::FETCH_NUM)) {
             echo '<option value="' . $row[0] . '">' . $row[1] . " : " . $row[2] . '</option>';
             $linkCityToCountry[$row[0]] = $row[3];
         }
@@ -161,7 +192,7 @@ if (!isset($_SESSION['radmin'])) {
         echo '<input type="submit" name="addhotel" value="Add" class="btn btn-sm btn-info">';
         echo '<input type="submit" name="delhotel" value="Delete" class="btn btn-sm btn-warning">';
         echo '</form>';
-        mysqli_free_result($res);
+        //mysqli_free_result($res);
         // обработчик добавления отелей
         if (isset($_POST['addhotel'])) {
             $hotel = trim(htmlspecialchars($_POST['hotel']));
@@ -173,14 +204,17 @@ if (!isset($_SESSION['radmin'])) {
             }
             $cityid = $_POST['hcity'];
             $countryid = $linkCityToCountry[$cityid];
-            $insertHotel = 'INSERT into hotels (hotel, cityid, countryid, stars, cost, info) 
-                            values ("' . $hotel . '",' . $cityid . ',' . $countryid . ',' . $stars . ',' . $cost . ',"' . $info . '")';
-            mysqli_query($link,  $insertHotel);
-            $error = mysqli_errno($link);
+            //$insertHotel = 'INSERT into hotels (hotel, cityid, countryid, stars, cost, info)
+            //                values ("' . $hotel . '",' . $cityid . ',' . $countryid . ',' . $stars . ',' . $cost . ',"' . $info . '")';
+            //mysqli_query($link,  $insertHotel);
+            $exec=$db->exec('INSERT into hotels (hotel, cityid, countryid, stars, cost, info) 
+                            values ("' . $hotel . '",' . $cityid . ',' . $countryid . ',' . $stars . ',' . $cost . ',"' . $info . '")');
+
+            /**$error = mysqli_errno($link);
             if ($error) {
                 echo 'Error code add: ' . $error . '<br>';
                 exit();
-            }
+            }*/
             echo "<script>";
             echo "window.location=document.URL;";
             echo "</script>";
@@ -190,13 +224,14 @@ if (!isset($_SESSION['radmin'])) {
             foreach ($_POST as $key => $value) {
                 if (substr($key, 0, 2) == 'hb') {
                     $idc = substr($key, 2);
-                    $del = 'DELETE from hotels where id =' . $idc;
-                    mysqli_query($link, $del);
-                    $error = mysqli_errno($link);
+                    //$del = 'DELETE from hotels where id =' . $idc;
+                    //mysqli_query($link, $del);
+                    $exec=$db->exec('DELETE from hotels where id =' . $idc);
+                    /**$error = mysqli_errno($link);
                     if ($error) {
                         echo 'Error code delete: ' . $error . '<br>';
                         exit();
-                    }
+                    }*/
                 }
             }
             echo "<script>";
@@ -212,12 +247,17 @@ if (!isset($_SESSION['radmin'])) {
 
         echo '<form action="index.php?page=4" method="post" enctype ="multipart/form-data" class="input-group">';
         echo '<select name="hotelid">';
-        $select = 'SELECT hotels.id, countries.country, cities.city, hotels.hotel
+        //$select = 'SELECT hotels.id, countries.country, cities.city, hotels.hotel
+        //            from countries, cities, hotels
+        //            where countries.id= hotels.countryid and cities.id=hotels.cityid
+        //            order by countries.country';
+        //$res = mysqli_query($link, $select);
+        $res=$db->query('SELECT hotels.id, countries.country, cities.city, hotels.hotel
                     from countries, cities, hotels 
                     where countries.id= hotels.countryid and cities.id=hotels.cityid 
-                    order by countries.country';
-        $res = mysqli_query($link, $select);
-        while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+                    order by countries.country');
+        //while ($row = mysqli_fetch_array($res, MYSQLI_NUM)) {
+        while ($row = $res->fetch(PDO::FETCH_NUM)) {
             echo '<option value="' . $row[0] . '">';
             echo $row[1] . '/' . $row[2] . '/' . $row[3];
             echo '</option>';
@@ -234,8 +274,10 @@ if (!isset($_SESSION['radmin'])) {
                     continue;
                 }
                 if (move_uploaded_file($_FILES['file']['tmp_name'][$key], 'images/' . $value)) {
-                    $ins = 'INSERT into images(hotelid, imagepath) values (' . $_REQUEST['hotelid'] . ', "images/' . $value . '")';
-                    mysqli_query($link, $ins);
+                    //$ins = 'INSERT into images(hotelid, imagepath) values (' . $_REQUEST['hotelid'] . ', "images/' . $value . '")';
+                    //mysqli_query($link, $ins);
+                    $exec=$db->exec('INSERT into images(hotelid, imagepath) values (' . $_REQUEST['hotelid'] . ', "images/' . $value . '")');
+
                 }
                 //mysqli_free_result($ins); 
             }

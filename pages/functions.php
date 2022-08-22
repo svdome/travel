@@ -1,7 +1,7 @@
 <?php
 
 // Реализация функции подключения к БД
-
+/**
 function connect(
     $host = 'localhost',
     $user = 'root',
@@ -13,7 +13,7 @@ function connect(
     mysqli_query($link, "set names 'utf8'");
     return $link;
 }
-
+*/
 
 //$db = new PDO('mysql:host=localhost; dbname=travels', 'root', 'root');
 
@@ -35,10 +35,13 @@ function register($login, $pass, $email)
     }
 
     // Добавление регистрационных данных в БД.
-    $queryInsertUser = 'insert into users (login, pass, email, roleid) values ("' . $login . '", "' . md5($pass) . '", "' . $email . '", 2)';
-    $link = connect();
-    mysqli_query($link, $queryInsertUser);
-    $error = mysqli_errno($link);
+    //$queryInsertUser = 'insert into users (login, pass, email, roleid) values ("' . $login . '", "' . md5($pass) . '", "' . $email . '", 2)';
+    //$link = connect();
+    //mysqli_query($link, $queryInsertUser);
+    $db = new PDO('mysql:host=localhost; dbname=travels', 'root', 'root');
+    $exec =$db->exec('insert into users (login, pass, email, roleid) values ("' . $login . '", "' . md5($pass) . '", "' . $email . '", 2)');
+
+    /**$error = mysqli_errno($link);
     if ($error) {
         if ($error == 1062) {
             echo "<h3><span style='color: red;'>This login is already taken!</span></h3";
@@ -47,7 +50,7 @@ function register($login, $pass, $email)
         }
         return false;
     }
-    return true;
+    return true; */
 }
 
 // реализация функции аутентификации
@@ -65,10 +68,13 @@ function login($log, $pass)
         return false;
     }
 
-    $link = connect();
-    $sel = 'SELECT * from users where login="' . $log . '" and pass="' . md5($pass) . '" ';
-    $res = mysqli_query($link, $sel);
-    if ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+    //$link = connect();
+    //$sel = 'SELECT * from users where login="' . $log . '" and pass="' . md5($pass) . '" ';
+    //$res = mysqli_query($link, $sel);
+    $db = new PDO('mysql: host=localhost; dbname=travels', 'root', 'root');
+    $res = $db->query('SELECT * from users where login="' . $log . '" and pass="' . md5($pass) . '" ');
+
+    if ($row = $res->fetch(PDO::FETCH_ASSOC)) {
         $_SESSION['ruser'] = $log;
         if ($row['roleid'] == 1) {
             $_SESSION['radmin'] = $log;
